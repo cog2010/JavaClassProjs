@@ -3,21 +3,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="resources/css/style.css">
 <title>Meeting Room Scheduler</title>
 </head>
 <body>
-<%@include file="/WEB-INF/header.jsp"%>
-	<h3>
-		Oops! There is a scheduling conflict with that request.
-	</h3>
-			<h5>Please try a different date, time or meeting room.</h5>
-			<a href="index.jsp">Click here to try again</a>
-			<hr>
-			<%@include file="/WEB-INF/list.jsp"%>
-			<%@include file="/WEB-INF/footer.jsp"%>
+	<%@include file="/WEB-INF/header.jsp"%>
+	<div class="container-fluid">
+		<%@include file="/WEB-INF/form.jsp"%>
+		<hr>
+		<%@include file="/WEB-INF/list.jsp"%>
+	</div>
+	<%@include file="/WEB-INF/footer.jsp"%>
+
 </body>
 </html>

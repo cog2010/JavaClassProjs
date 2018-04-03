@@ -12,9 +12,10 @@
 <body>
 <%@include file="/WEB-INF/header.jsp"%>
 	<h3>
-		Your meeting has been created successfully!
+		Oops! There is a scheduling conflict with that request.
 	</h3>
-			<h5><a href="index.jsp">Click here to enter another meeting.</a></h5>
+			<h5>Please try a different date, time or meeting room.</h5>
+			<%@include file="/WEB-INF/form.jsp" %>
 			<hr>
 			<%@include file="/WEB-INF/list.jsp"%>
 			<%@include file="/WEB-INF/footer.jsp"%>

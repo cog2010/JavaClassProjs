@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.time.LocalDate;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +15,14 @@ public class MeetingRoomServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
-
+		String meetingList = "";
+		String meetingDate = LocalDate.now().toString();
+		
+		meetingList = MeetingRoomService.getCurrentMeetings(meetingDate);
+		
+		request.setAttribute("meetingList", meetingList);
+				
+		request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,6 +34,8 @@ public class MeetingRoomServlet extends HttpServlet {
 		String meetingTime = (String) request.getParameter("meeting-time");
 		String conferenceNumber = (String) request.getParameter("conference-call-number");
 		String idToDelete = (String) request.getParameter("idToDelete");
+		String meetingList = "test";
+		
 
 		if (idToDelete == null) {
 
@@ -39,8 +49,13 @@ public class MeetingRoomServlet extends HttpServlet {
 			MeetingRoomService.enterNewMeeting(meetingName, roomNumber, occupantCount, meetingDate, meetingTime,
 					conferenceNumber);
 
+			meetingList = MeetingRoomService.getCurrentMeetings(meetingDate);
+			meetingDate = MeetingRoomService.getDisplayDate(meetingDate);
+			
+
 			request.setAttribute("id", id);
 			request.setAttribute("meetingDate", meetingDate);
+			request.setAttribute("meetingList", meetingList);
 
 			request.getRequestDispatcher(resultUrl).forward(request, response);
 			
@@ -48,8 +63,13 @@ public class MeetingRoomServlet extends HttpServlet {
 			Long id = Long.parseLong((String) request.getParameter("idToDelete"));
 
 			MeetingRoomService.deletMeeting(id);
+			
+			meetingDate = LocalDate.now().toString();
+			meetingList = MeetingRoomService.getCurrentMeetings(meetingDate);
+			
+			request.setAttribute("meetingList", meetingList);
 
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
 		} 
 
 	}
