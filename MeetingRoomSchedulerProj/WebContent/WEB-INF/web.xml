@@ -4,7 +4,7 @@
   
   <servlet>
   	<servlet-name>MeetingRoomServlet</servlet-name>
-  	<servlet-class>servlet.MeetingRoomServlet</servlet-class>
+  	<servlet-class>com.tblanton.meetingroom.servlet.MeetingRoomServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>MeetingRoomServlet</servlet-name>

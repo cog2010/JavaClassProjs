@@ -1,16 +1,24 @@
-package applogic;
+package com.tblanton.meetingroom.service;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
+
+import org.apache.log4j.Logger;
+
+import com.tblanton.meetingroom.model.Meeting;
+import com.tblanton.meetingroom.model.MeetingDto;
 
 public class MeetingRoomService {
-
-	public static void enterNewMeeting(String meetingName, String roomNum, String occupants, String meetingDate,
+	private static Logger logger = Logger.getLogger(MeetingRoomService.class);
+	public void enterNewMeeting(MeetingDto meeting) {
+		enterNewMeeting(meeting.getMeetingName(), meeting.getRoomNumber(),meeting.getOccupantCount(), 
+				meeting.getMeetingDate(), meeting.getMeetingTime(), meeting.getConferenceNumber());
+		logger.trace("MeetingDto on " + meeting.getMeetingDate());
+	}
+	public void enterNewMeeting(String meetingName, String roomNum, String occupants, String meetingDate,
 		String time, String conferenceNumber) {
 		Connection con = null;
 		PreparedStatement newMeetingStatement = null;
@@ -21,13 +29,14 @@ public class MeetingRoomService {
 		int meetingTime = Integer.parseInt(time);
 
 		if (isDuplicateMeeting(id) == true) {
-			//System.out.println("Duplicate Meeting!");
+			logger.info("Duplicate Meeting!");
 		} else {
 			try {
 				Class.forName("com.mysql.jdbc.Driver");
 
 				String url = "jdbc:mysql://localhost/Starters?useSSL=false";
 				con = DriverManager.getConnection(url, "root", "password");
+				logger.trace("Connection Established");
 
 				newMeetingStatement = con.prepareStatement("INSERT INTO meetings "
 						+ "(id, meetingname, meetingdate, meetingtime, roomnumber, occupantcount, conferencenumber)"
@@ -44,7 +53,8 @@ public class MeetingRoomService {
 				newMeetingStatement.executeUpdate();
 
 				con.close();
-				//System.out.println("Meeting " + id + " successfully added!");
+				logger.trace("Connection Closed");
+				logger.info("Meeting " + id + " successfully added!");
 			} catch (ClassNotFoundException cnfe) {
 				cnfe.printStackTrace();// not good!
 
@@ -55,15 +65,16 @@ public class MeetingRoomService {
 		}
 	}
 
-	public static String getId(String date, String time, String room) {
+	public String getId(String date, String time, String room) {
 		String id = "";
 		String parseDate = date.replace("-", "");
 		id = parseDate + time + room;
 
+		logger.trace("Id " + id + "created");
 		return id;
 	}
 
-	public static boolean isDuplicateMeeting(long id) {
+	public boolean isDuplicateMeeting(long id) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -73,6 +84,7 @@ public class MeetingRoomService {
 
 			String url = "jdbc:mysql://localhost/Starters?useSSL=false";
 			con = DriverManager.getConnection(url, "root", "password");
+			logger.trace("Connection Established");
 
 			stmt = con.prepareStatement("select id from meetings where id=? limit 1");
 			stmt.setLong(1, id);
@@ -96,7 +108,7 @@ public class MeetingRoomService {
 
 	}
 
-	public static void deletMeeting(long id) {
+	public void deletMeeting(long id) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -105,13 +117,15 @@ public class MeetingRoomService {
 
 			String url = "jdbc:mysql://localhost/Starters?useSSL=false";
 			con = DriverManager.getConnection(url, "root", "password");
+			logger.trace("Connection Established");
 
 			stmt = con.prepareStatement("DELETE from meetings WHERE id=?");
 			stmt.setLong(1, id);
 			stmt.executeUpdate();
 
 			con.close();
-			System.out.println("Meeting " + id + " deleted!");
+			logger.trace("Connection Closed");
+			logger.info("Meeting " + id + " deleted!");
 
 		} catch (ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();// not good!
@@ -122,7 +136,7 @@ public class MeetingRoomService {
 		}
 	}
 
-	public static String getDisplayDate(String inputDate) {
+	public String getDisplayDate(String inputDate) {
 		String displayDate = "";
 		String year;
 		String month;
@@ -137,7 +151,7 @@ public class MeetingRoomService {
 		return displayDate;
 	}
 
-	public static String getCurrentMeetings(String date) {
+	public String getCurrentMeetings(String date) {
 
 		String currentMeetings = "";
 
@@ -146,6 +160,7 @@ public class MeetingRoomService {
 
 			String url = "jdbc:mysql://localhost/Starters?useSSL=false";
 			Connection con = DriverManager.getConnection(url, "root", "password");
+			logger.trace("Connection Established");
 
 			PreparedStatement meetingScheduleByDate = null;
 			ResultSet rs = null;
@@ -157,7 +172,6 @@ public class MeetingRoomService {
 			rs = meetingScheduleByDate.executeQuery();
 			String displayTime = "";
 
-			HashMap schedule = new HashMap();
 			while (rs.next()) {
 
 				switch (rs.getInt("meetingTime")) {
@@ -198,7 +212,7 @@ public class MeetingRoomService {
 					break;
 				}
 				;
-
+				//Do Something With This Block
 				currentMeetings += "<tr><td>" + rs.getString("meetingName") + "</td><td>" + displayTime
 						+ "</td><td>" + rs.getInt("roomNumber") + "</td><td>" + rs.getInt("occupantCount") 
 						+ "</td><td>" + rs.getString("conferenceNumber") + "</td><td><form method='POST' "
@@ -207,6 +221,7 @@ public class MeetingRoomService {
 
 			}
 			con.close();
+			logger.trace("Connection Closed");
 
 		} catch (ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();// not good!

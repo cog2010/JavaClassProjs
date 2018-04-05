@@ -1,6 +1,11 @@
-package datamodel;
+package com.tblanton.meetingroom.model;
+
+import org.apache.log4j.Logger;
+
+import com.tblanton.meetingroom.servlet.MeetingRoomServlet;
 
 public class Meeting {
+	private static Logger logger = Logger.getLogger(Meeting.class);
 	private String meetingName = "";
 	private String meetingDate = "";
 	private int meetingTime = 0;
@@ -8,6 +13,7 @@ public class Meeting {
 	private int occupantCount = 0;
 	private String conferenceNumber = "";
 	private int id = 0;
+	
 
 	public String getMeetingName() {
 		return meetingName;

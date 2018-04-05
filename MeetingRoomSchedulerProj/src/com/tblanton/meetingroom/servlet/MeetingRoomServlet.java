@@ -1,4 +1,4 @@
-package servlet;
+package com.tblanton.meetingroom.servlet;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -8,17 +8,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import applogic.MeetingRoomService;
+import org.apache.log4j.Logger;
+
+import com.tblanton.meetingroom.model.MeetingDto;
+import com.tblanton.meetingroom.service.MeetingRoomService;
 
 public class MeetingRoomServlet extends HttpServlet {
-
+	private static Logger logger = Logger.getLogger(MeetingRoomServlet.class);
+	private MeetingRoomService meetingRoomService = new MeetingRoomService();
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String meetingList = "";
 		String meetingDate = LocalDate.now().toString();
 		
-		meetingList = MeetingRoomService.getCurrentMeetings(meetingDate);
+		String userName = request.getParameter("username");
+		String password = request.getParameter("passwd");
+		logger.info("User Name is " + userName + " and password is " + password );
+		meetingList = meetingRoomService.getCurrentMeetings(meetingDate);
 		
 		request.setAttribute("meetingList", meetingList);
 				
@@ -26,8 +33,8 @@ public class MeetingRoomServlet extends HttpServlet {
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String meetingName = (String) request.getParameter("meeting-name");
+		MeetingDto meeting = new MeetingDto();
+		meeting.setMeetingName((String) request.getParameter("meeting-name"));
 		String roomNumber = (String) request.getParameter("room-number");
 		String occupantCount = (String) request.getParameter("occupant-count");
 		String meetingDate = (String) request.getParameter("meeting-date");
@@ -39,18 +46,17 @@ public class MeetingRoomServlet extends HttpServlet {
 
 		if (idToDelete == null) {
 
-			Long id = Long.parseLong(MeetingRoomService.getId(meetingDate, meetingTime, roomNumber));
+			Long id = Long.parseLong(meetingRoomService.getId(meetingDate, meetingTime, roomNumber));
 			
 			String resultUrl = "/WEB-INF/success.jsp";
-			if (MeetingRoomService.isDuplicateMeeting(id)) {
+			if (meetingRoomService.isDuplicateMeeting(id)) {
 				resultUrl = "/WEB-INF/duplicate.jsp";
 			}
 			
-			MeetingRoomService.enterNewMeeting(meetingName, roomNumber, occupantCount, meetingDate, meetingTime,
-					conferenceNumber);
+			meetingRoomService.enterNewMeeting(meeting);
 
-			meetingList = MeetingRoomService.getCurrentMeetings(meetingDate);
-			meetingDate = MeetingRoomService.getDisplayDate(meetingDate);
+			meetingList = meetingRoomService.getCurrentMeetings(meetingDate);
+			meetingDate = meetingRoomService.getDisplayDate(meetingDate);
 			
 
 			request.setAttribute("id", id);
@@ -62,10 +68,10 @@ public class MeetingRoomServlet extends HttpServlet {
 		}else {
 			Long id = Long.parseLong((String) request.getParameter("idToDelete"));
 
-			MeetingRoomService.deletMeeting(id);
+			meetingRoomService.deletMeeting(id);
 			
 			meetingDate = LocalDate.now().toString();
-			meetingList = MeetingRoomService.getCurrentMeetings(meetingDate);
+			meetingList = meetingRoomService.getCurrentMeetings(meetingDate);
 			
 			request.setAttribute("meetingList", meetingList);
 
