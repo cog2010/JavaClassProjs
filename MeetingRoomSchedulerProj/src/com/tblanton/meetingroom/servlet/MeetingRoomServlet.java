@@ -36,10 +36,8 @@ public class MeetingRoomServlet extends HttpServlet {
 		MeetingDto meeting = new MeetingDto();
 		meeting.setMeetingName((String) request.getParameter("meeting-name"));
 		String roomNumber = (String) request.getParameter("room-number");
-		String occupantCount = (String) request.getParameter("occupant-count");
 		String meetingDate = (String) request.getParameter("meeting-date");
 		String meetingTime = (String) request.getParameter("meeting-time");
-		String conferenceNumber = (String) request.getParameter("conference-call-number");
 		String idToDelete = (String) request.getParameter("idToDelete");
 		String meetingList = "test";
 		

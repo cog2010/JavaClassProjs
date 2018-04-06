@@ -1,11 +1,6 @@
 package com.tblanton.meetingroom.model;
 
-import org.apache.log4j.Logger;
-
-import com.tblanton.meetingroom.servlet.MeetingRoomServlet;
-
 public class Meeting {
-	private static Logger logger = Logger.getLogger(Meeting.class);
 	private String meetingName = "";
 	private String meetingDate = "";
 	private int meetingTime = 0;

@@ -8,7 +8,6 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
-import com.tblanton.meetingroom.model.Meeting;
 import com.tblanton.meetingroom.model.MeetingDto;
 
 public class MeetingRoomService {
