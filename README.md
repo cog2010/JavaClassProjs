@@ -7,3 +7,7 @@
 
 4/3/18  Started iplementing some of the changes Oz recomended, but not far enough 
         along to push new code. Still A LOT to do.
+
+4/5/18  Started breaking out my DAOs from my service layer and adding some interfaces
+        to code the project to. This is going to be a lot of rework so I am not going
+        to push new code just yet.
