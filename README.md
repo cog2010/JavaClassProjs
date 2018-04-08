@@ -11,3 +11,6 @@
 4/5/18  Started breaking out my DAOs from my service layer and adding some interfaces
         to code the project to. This is going to be a lot of rework so I am not going
         to push new code just yet.
+
+4/7/18  Kept working on the DAOs and Service Layer, once I finish tying them together, 
+        I will push the new code. 
