@@ -14,3 +14,7 @@
 
 4/7/18  Kept working on the DAOs and Service Layer, once I finish tying them together, 
         I will push the new code. 
+
+4/8/18  Introduced a new person to HTML/CSS at FreeCodeCamp meetup. Also spent some 
+        time on the MeetingRoomScheduler. I removed the old service layer and have
+        no errors. I still need to finish putting in the code to make the MVC work.
